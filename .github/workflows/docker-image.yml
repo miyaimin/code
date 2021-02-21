@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+  
 jobs:
 
   build:
@@ -14,5 +14,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    # Connect to Azure Container registry (ACR)
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.REGISTRY_NAME }}.azurecr.cn
+        username: ${{ secrets.REGISTRY_USERNAME }} 
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+#       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.cn/${{ env.APP_NAME }}:${{ github.sha }}
+           docker push ${{ env.REGISTRY_NAME }}.azurecr.cn/${{ env.APP_NAME }}:${{ github.sha }}
