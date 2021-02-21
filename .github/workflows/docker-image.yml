@@ -25,7 +25,7 @@ jobs:
       run: docker build . --file Dockerfile --tag $IMAGE_NAME
       
     - name: Log into registry 
-      run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login miyaacr.azurecr.io -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+      run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login miyaacr.azurecr.io -u miyaacr --password-stdin
       
     - name: Push image
       run: |
