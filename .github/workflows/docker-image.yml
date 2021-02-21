@@ -26,5 +26,5 @@ jobs:
 
     - name: Build the Docker image
 #       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-      run: docker build . --file Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
-           docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+      run: docker build . --file Dockerfile -t miyaacr.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+           docker push miyaacr.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
