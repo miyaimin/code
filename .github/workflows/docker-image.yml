@@ -28,6 +28,7 @@ jobs:
       run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login miyaacr.azurecr.io -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
       
     - name: Push image
+      run: |
           IMAGE_ID=miyaacr.azurecr.io/$IMAGE_NAME
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
