@@ -5,30 +5,25 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 env:
-  REGISTRY_NAME: ${{ secrets.REGISTRY_USERNAME }}
-  IMAGE_NAME: javatestapp
+  REGISTRY_NAME: miyacr
+  APP_NAME: javaapp
   
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@main
     
     # Connect to Azure Container registry (ACR)
     - uses: azure/docker-login@v1
-
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag $IMAGE_NAME
-      
-    - name: Log into registry 
-      run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login miyaacr.azurecr.io -u miyaacr --password-stdin
-      
-    - name: Push image
-      run: |
-          IMAGE_ID=miyaacr.azurecr.io/$IMAGE_NAME
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+      with:
+        login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }} 
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    # Container build and push to a Azure Container registry (ACR)
+    - run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
