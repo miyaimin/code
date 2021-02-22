@@ -7,5 +7,5 @@ metadata:
   name: ngingx
 spec:
   containers:
-  - image: miyaacr..azurecr.io/example-app:${{ github.sha }}
+  - image: ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
     name: ngingx
